@@ -9,6 +9,11 @@ import (
 
 type Config struct {
 	Port string
+	authConfig
+}
+
+type authConfig struct{
+	Secret string
 }
 
 func LoadConfig() *Config {
@@ -18,5 +23,8 @@ func LoadConfig() *Config {
 	}
 	return &Config{
 		Port: os.Getenv("PORT"),
+		authConfig: authConfig{
+			Secret: os.Getenv("TOKEN"),
+		},
 	}
 }

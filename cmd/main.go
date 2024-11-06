@@ -9,8 +9,10 @@ import (
 
 func main() {
 	app := http.NewServeMux()
-	auth.NewAuth(app)
     conf := configs.LoadConfig()
+	auth.NewAuth(app,auth.AuthDep{
+		Config: conf,
+	})
 	server := http.Server{
 		Addr:   conf.Port,
 		Handler: app,
