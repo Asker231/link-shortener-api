@@ -15,5 +15,5 @@ func (authlogin *AuthLogin) Login() http.HandlerFunc {
 
 func NewAuth(router *http.ServeMux) {
 	login := &AuthLogin{}
-	router.HandleFunc("/", login.Login())
+	router.HandleFunc("/login", login.Login())
 }
