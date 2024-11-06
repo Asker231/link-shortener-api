@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/Asker231/link-shortener-api.git/configs"
+	"github.com/Asker231/link-shortener-api.git/pkg/req"
 	"github.com/Asker231/link-shortener-api.git/pkg/res"
 )
 
@@ -16,20 +16,15 @@ type AuthHandler struct {
 	*configs.Config
 }
 
-func (authlogin *AuthHandler) Login() http.HandlerFunc {
+func (a *AuthHandler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		var LoginRequest LoginRequest
-
-		err := json.NewDecoder(r.Body).Decode(&LoginRequest)
-		if err != nil{
-			res.JsonRes(w,err.Error(),402)
+		body, err := req.HandleBody[LoginRequest](w, r)
+		if err != nil {
+			return
 		}
-
-		fmt.Println(LoginRequest)
-
+		fmt.Println(body)
 		data := LoginResponse{
-			Token: authlogin.Secret,
+			Token: a.Secret,
 		}
 		res.JsonRes(w, data, 200)
 
@@ -38,7 +33,15 @@ func (authlogin *AuthHandler) Login() http.HandlerFunc {
 
 func (a *AuthHandler) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("register")
+		body, err := req.HandleBody[RegisterRequest](w, r)
+		if err != nil {
+			return
+		}
+		fmt.Println(body)
+		data := RegisterResponse{
+			Token: a.Secret,
+		}
+		res.JsonRes(w, data, 200)
 	}
 }
 
